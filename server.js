@@ -1,6 +1,8 @@
 const http = require('http')
 const app = require('./app')
 const sequelize = require('./utils/database')
+const userModel = require('./models/userModel')
+// const movieModel = require('./models/movieModel')
 
 const normalizePort = val => {
   const port = parseInt(val, 10)
@@ -55,8 +57,11 @@ server.on('listening', () => {
   console.log('Listening on ' + bind)
 })
 
-sequelize.sync()
-    .then(() => {
-        server.listen(port)
-    })
-    .catch((error) => console.log(error))
+userModel.sync()
+// movieModel.sync()
+
+sequelize.sync({force : true})
+.then(() => {
+  server.listen(port)
+})
+.catch((error) => console.log(error))
