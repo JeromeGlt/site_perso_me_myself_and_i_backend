@@ -1,0 +1,26 @@
+{
+  "name": "me_myself_and_i_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeromeGlt/me_myself_and_i_backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JeromeGlt/me_myself_and_i_backend/issues"
+  },
+  "homepage": "https://github.com/JeromeGlt/me_myself_and_i_backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "sequelize": "^6.28.0"
+  }
+}
