@@ -1,8 +1,8 @@
 const http = require('http')
 const app = require('./app')
 const sequelize = require('./utils/database')
-const userModel = require('./models/userModel')
-// const movieModel = require('./models/movieModel')
+// require('events').EventEmitter.defaultMaxListeners = 25
+const AssociationModel = require('./models/associationModel')
 
 const normalizePort = val => {
   const port = parseInt(val, 10)
@@ -48,6 +48,8 @@ const errorHandler = error => {
   }
 }
 
+AssociationModel.sync()
+
 const server = http.createServer(app)
 
 server.on('error', errorHandler)
@@ -56,9 +58,6 @@ server.on('listening', () => {
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port
   console.log('Listening on ' + bind)
 })
-
-userModel.sync()
-// movieModel.sync()
 
 sequelize.sync({force : true})
 .then(() => {

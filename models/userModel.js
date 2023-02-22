@@ -10,16 +10,4 @@ const User = sequelize.define("user", {
   password: DataTypes.STRING
 })
 
-Movie.hasMany(User, {
-  foreignKey: {
-    name: 'movieId'
-  }
-})
-
-User.belongsTo(Movie, {
-  foreignKey: {
-    name: 'movieId'
-  }
-})
-
 module.exports = User
