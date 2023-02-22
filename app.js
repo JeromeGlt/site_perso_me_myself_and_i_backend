@@ -4,7 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 
-// const movieRoutes = require('./routes/post')
+const movieRoutes = require('./routes/movieRoute')
 // const userRoutes = require('./routes/user')
 // const likeRoutes = require('./routes/like')
 // const refreshRoutes = require('./routes/refresh')
@@ -17,7 +17,7 @@ app.use(helmet())
 app.use(express.json())
 
 // app.use('/api/auth', userRoutes)
-// app.use('/api/posts', movieRoutes)
+app.use('/api/movie', movieRoutes)
 // app.use('/api/posts', likeRoutes)
 // app.use('/api/posts/getId', refreshRoutes)
 
