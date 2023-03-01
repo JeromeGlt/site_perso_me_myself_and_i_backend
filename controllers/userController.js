@@ -7,10 +7,10 @@ const {Op} = require('sequelize')
 exports.signup = (req, res, next) => {
 
   if(!passwordSchema.validate(req.body.password)) {
-    return res.status(500).json({ message : "Absence de mot de passe" })
+    return res.status(500).json({ message : "Require a password" })
   }
   if(!req.body.username) {
-    return res.status(500).json({ message : "Absence de pseudo" })
+    return res.status(500).json({ message : "Require a username" })
   }
   User.findOne({ where : {
     [Op.or]: [
@@ -40,22 +40,23 @@ exports.signup = (req, res, next) => {
       })
       .catch((err) => res.status(500).json(err))
     }else{
-      res.status(403).json({ message : 'Pseudo déjà utilisé' })
+      res.status(403).json({ message : 'Username already exists' })
     }
   })
   .catch((err) => res.status(500).json(err))  
 }
 
 exports.login = (req, res, next) => {
+
   User.findOne({ where : { username: req.body.username }})
   .then(user => {
     if(!user) {
-      return res.status(401).json({ message : 'Utilisateur non trouvé' })
+      return res.status(401).json({ message : 'Username not found' })
     }
     bcrypt.compare(req.body.password, user.password)
     .then(valid => {
       if(!valid) {
-        return res.status(401).json({ message : 'Mot de passe incorrect' })
+        return res.status(401).json({ message : 'incorrect password' })
       }
       res.status(200).json({
         userId: user.id,
@@ -72,18 +73,12 @@ exports.login = (req, res, next) => {
   .catch((err) => res.status(500).json(err))
 }
 
-// exports.modifyProfile = (req, res, next) => {
-//   const userObject = req.file ? {
-//     ...req.body,
-//     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//   } : {
-//     ...req.body
-//   }
+exports.modifyUser = (req, res, next) => {
 
-//   User.update({ ...userObject }, { where : { id : req.params.id }})
-//   .then(() => res.status(200).json({ message : 'Utilisateur modifié' }))
-//   .catch((error) => res.status(500).json({ error }))
-// }
+  User.update({ username: req.body.username }, { where : { id : req.params.id }})
+  .then(() => res.status(200).json({ message : 'Amended user' }))
+  .catch((err) => res.status(500).json(err))
+}
 
 // exports.delete = (req, res, next) => {
 //   User.findOne({ where : { pseudo : req.params.pseudo }})
