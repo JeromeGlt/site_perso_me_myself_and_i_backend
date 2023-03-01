@@ -7,7 +7,6 @@ const helmet = require('helmet')
 const movieRoutes = require('./routes/movieRoute')
 const userRoutes = require('./routes/userRoute')
 // const likeRoutes = require('./routes/like')
-// const refreshRoutes = require('./routes/refresh')
 
 const app = express()
 
@@ -19,6 +18,5 @@ app.use(express.json())
 app.use('/api/user', userRoutes)
 app.use('/api/movie', movieRoutes)
 // app.use('/api/posts', likeRoutes)
-// app.use('/api/posts/getId', refreshRoutes)
 
 module.exports = app

@@ -4,6 +4,25 @@ const jwt = require('jsonwebtoken')
 const passwordSchema = require('../utils/password')
 const {Op} = require('sequelize')
 
+exports.getUser = (req, res, next) => {
+
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, process.env.TOKEN)
+  const userId = decodedToken.userId
+
+  User.findOne({ where : { id : userId }})
+  .then(user => {
+    if(!user) {
+      return res.status(401).json({ message : 'User not found' })
+    }
+    res.status(200).json({
+      userId: user.id,
+      username: user.username
+    })
+  })
+  .catch((err) => res.status(500).json(err))
+}
+
 exports.signup = (req, res, next) => {
 
   if(!passwordSchema.validate(req.body.password)) {
@@ -88,6 +107,7 @@ exports.modifyUser = (req, res, next) => {
 }
 
 exports.deleteUser = (req, res, next) => {
+
   User.findOne({ where : { id : req.params.id }})
   .then(user => {
       if(!user) {
