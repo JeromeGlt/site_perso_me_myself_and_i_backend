@@ -87,18 +87,15 @@ exports.modifyUser = (req, res, next) => {
   .catch((err) => res.status(500).json(err))
 }
 
-// exports.delete = (req, res, next) => {
-//   User.findOne({ where : { pseudo : req.params.pseudo }})
-//   .then(user => {
-//       if(!user) {
-//           return res.status(401).json({ message : 'Utilisateur non trouvé' })
-//       }
-//       const filename = user.imageUrl.split('/images/')[1]
-//       fs.unlink(`images/${filename}`, () => {
-//           User.destroy({ where : { pseudo : req.params.pseudo }})
-//           .then(() => res.status(200).json({ message : 'Utilisateur supprimé !' }))
-//           .catch(() => res.status(500).json({ message : 'Suppression impossible !' }))
-//       })
-//   })
-//   .catch((error) => res.status(500).json({ error }))
-// }
+exports.deleteUser = (req, res, next) => {
+  User.findOne({ where : { id : req.params.id }})
+  .then(user => {
+      if(!user) {
+          return res.status(401).json({ message : 'User not found' })
+      }
+      User.destroy({ where : { id : req.params.id }})
+      .then(() => res.status(200).json({ message : 'Deleted user' }))
+      .catch(() => res.status(500).json({ message : 'Deletion not possible' }))
+  })
+  .catch((err) => res.status(500).json(err))
+}
