@@ -1,5 +1,5 @@
 const Association = require('../models/associationModel')
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 
 exports.viewed_movie = (req, res, next) => {
 
@@ -12,5 +12,12 @@ exports.viewed_movie = (req, res, next) => {
     movieId: req.params.movieId
   })
   .then(association => {res.status(201).json(association)})
+  .catch((err) => res.status(500).json(err))
+}
+
+exports.destroy_viewed_movie = (req, res, next) => {
+
+  Association.destroy({ where : { userId : req.params.userId, movieId : req.params.movieId }})
+  .then(() => res.status(200).json({ message : 'Deleted viewed movie' }))
   .catch((err) => res.status(500).json(err))
 }

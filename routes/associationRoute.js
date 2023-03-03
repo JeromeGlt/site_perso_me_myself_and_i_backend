@@ -5,5 +5,6 @@ const router = express.Router()
 const associationController = require('../controllers/associationController')
 
 router.post('/:userId/:movieId', associationController.viewed_movie)
+router.delete('/destroy/:userId/:movieId', associationController.destroy_viewed_movie)
 
 module.exports = router
