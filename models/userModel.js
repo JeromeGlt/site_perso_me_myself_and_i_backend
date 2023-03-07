@@ -5,9 +5,11 @@ const Movie = require('./movieModel')
 const User = sequelize.define("user", {
   username: {
     type: DataTypes.STRING,
-    unique: true
+    unique: true,
+    allowNull: false
   },
-  password: DataTypes.STRING
+  password: DataTypes.STRING,
+  allowNull: false
 })
 
 module.exports = User
