@@ -17,7 +17,8 @@ exports.getUser = (req, res, next) => {
     }
     res.status(200).json({
       userId: user.id,
-      username: user.username
+      username: user.username,
+      isAdmin: user.isAdmin
     })
   })
   .catch((err) => res.status(500).json(err))
@@ -42,12 +43,14 @@ exports.signup = (req, res, next) => {
       .then(hash => {
         User.create({
           username: req.body.username,
-          password: hash
+          password: hash,
+          isAdmin: 0
         })
         .then(user => {
           res.status(200).json({
             userId: user.id,
             username: user.username,
+            isAdmin: user.isAdmin,
             token: jwt.sign(
               {userId: user.id},
               process.env.TOKEN,
@@ -80,6 +83,7 @@ exports.login = (req, res, next) => {
       res.status(200).json({
         userId: user.id,
         username: user.username,
+        isAdmin: user.isAdmin,
         token: jwt.sign(
           {userId: user.id},
           process.env.TOKEN,
