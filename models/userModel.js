@@ -1,6 +1,5 @@
 const { Sequelize, Model, DataTypes } = require('sequelize')
 const sequelize = require('../utils/database')
-const Movie = require('./movieModel')
 
 const User = sequelize.define("user", {
   username: {
@@ -12,6 +11,7 @@ const User = sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: false
   },
+  imageUrl: DataTypes.STRING,
   isAdmin: DataTypes.BOOLEAN
 })
 

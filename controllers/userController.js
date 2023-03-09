@@ -2,6 +2,7 @@ const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passwordSchema = require('../utils/password')
+const fs = require('fs')
 const {Op} = require('sequelize')
 
 exports.getUser = (req, res, next) => {
@@ -18,6 +19,7 @@ exports.getUser = (req, res, next) => {
     res.status(200).json({
       userId: user.id,
       username: user.username,
+      imageUrl: user.imageUrl,
       isAdmin: user.isAdmin
     })
   })
@@ -32,6 +34,9 @@ exports.signup = (req, res, next) => {
   if(!req.body.username) {
     return res.status(500).json({ message : "Require a username" })
   }
+  if(!req.file.filename) {
+    return res.status(500).json({ message : "Require a picture" })
+  }
   User.findOne({ where : {
     [Op.or]: [
       { username : req.body.username }
@@ -44,12 +49,14 @@ exports.signup = (req, res, next) => {
         User.create({
           username: req.body.username,
           password: hash,
+          imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
           isAdmin: 0
         })
         .then(user => {
           res.status(200).json({
             userId: user.id,
             username: user.username,
+            imageUrl: user.imageUrl,
             isAdmin: user.isAdmin,
             token: jwt.sign(
               {userId: user.id},
@@ -83,6 +90,7 @@ exports.login = (req, res, next) => {
       res.status(200).json({
         userId: user.id,
         username: user.username,
+        imageUrl: user.imageUrl,
         isAdmin: user.isAdmin,
         token: jwt.sign(
           {userId: user.id},
@@ -98,12 +106,19 @@ exports.login = (req, res, next) => {
 
 exports.modifyUser = (req, res, next) => {
 
+  const userObject = req.file ? {
+    ...req.body,
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  } : {
+    ...req.body
+  }
+
   User.findOne({ where : { username: req.body.username}})
   .then(user => {
     if(user) {
       return res.status(403).json({ message : 'Username already exists' })
     }
-    User.update({ username: req.body.username }, { where : { id : req.params.id }})
+    User.update({ ...userObject }, { where : { id : req.params.id }})
     .then(() => res.status(200).json({ message : 'Amended user' }))
     .catch((err) => res.status(500).json(err))
   })
@@ -117,9 +132,12 @@ exports.deleteUser = (req, res, next) => {
       if(!user) {
           return res.status(401).json({ message : 'User not found' })
       }
-      User.destroy({ where : { id : req.params.id }})
-      .then(() => res.status(200).json({ message : 'Deleted user' }))
-      .catch(() => res.status(500).json({ message : 'Deletion not possible' }))
+      const filename = user.imageUrl.split('/images/')[1]
+      fs.unlink(`images/${filename}`, () => {
+        User.destroy({ where : { id : req.params.id }})
+        .then(() => res.status(200).json({ message : 'Deleted user' }))
+        .catch(() => res.status(500).json({ message : 'Deletion not possible' }))
+      })
   })
   .catch((err) => res.status(500).json(err))
 }
