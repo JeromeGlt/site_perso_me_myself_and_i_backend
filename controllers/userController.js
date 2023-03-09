@@ -104,7 +104,21 @@ exports.login = (req, res, next) => {
   .catch((err) => res.status(500).json(err))
 }
 
-exports.modifyUser = (req, res, next) => {
+exports.modifyUsername = (req, res, next) => {
+
+  User.findOne({ where : { username: req.body.username}})
+  .then(user => {
+    if(user) {
+      return res.status(403).json({ message : 'Username already exists' })
+    }
+    User.update({ username: req.body.username }, { where : { id : req.params.id }})
+    .then(() => res.status(200).json({ message : 'Amended username' }))
+    .catch((err) => res.status(500).json(err))
+  })
+  .catch((err) => res.status(500).json(err))
+}
+
+exports.modifyImage = (req, res, next) => {
 
   const userObject = req.file ? {
     ...req.body,
@@ -113,15 +127,8 @@ exports.modifyUser = (req, res, next) => {
     ...req.body
   }
 
-  User.findOne({ where : { username: req.body.username}})
-  .then(user => {
-    if(user) {
-      return res.status(403).json({ message : 'Username already exists' })
-    }
-    User.update({ ...userObject }, { where : { id : req.params.id }})
-    .then(() => res.status(200).json({ message : 'Amended user' }))
-    .catch((err) => res.status(500).json(err))
-  })
+  User.update({ ...userObject }, { where : { id : req.params.id }})
+  .then(() => res.status(200).json({ message : 'Amended image user' }))
   .catch((err) => res.status(500).json(err))
 }
 
