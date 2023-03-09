@@ -13,6 +13,8 @@ const app = express()
 app.use(cors())
 app.use(helmet())
 
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
+
 app.use(express.json())
 
 app.use('/api/user', userRoutes)
