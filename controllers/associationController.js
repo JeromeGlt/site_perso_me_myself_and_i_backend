@@ -20,6 +20,6 @@ exports.destroy_viewed_movie = (req, res, next) => {
 exports.get_viewed_movies = (req, res, next) => {
 
   Association.findAll({ where : { userId : req.params.userId }})
-  .then(movies => {res.status(200).json(movies)})
+  .then(movies => res.status(200).json(movies))
   .catch((err) => res.status(500).json(err))
 }
