@@ -3,7 +3,12 @@ const sequelize = require('../utils/database')
 const Movie = require('./movieModel')
 const User = require('./userModel')
 
-const AssociationModel = sequelize.define('viewed_movie', {})
+const AssociationModel = sequelize.define('viewed_movie', {
+  decade: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
+})
 
 Movie.belongsToMany(User, { through: AssociationModel })
 

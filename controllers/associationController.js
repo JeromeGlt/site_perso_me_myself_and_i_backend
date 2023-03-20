@@ -4,7 +4,8 @@ exports.create_viewed_movie = (req, res, next) => {
 
   Association.create({
     userId: req.params.userId,
-    movieId: req.params.movieId
+    movieId: req.params.movieId,
+    decade: req.params.decade
   })
   .then(association => {res.status(201).json(association)})
   .catch((err) => res.status(500).json(err))
