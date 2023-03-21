@@ -7,6 +7,10 @@ const AssociationModel = sequelize.define('viewed_movie', {
   decade: {
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  actor: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 })
 
