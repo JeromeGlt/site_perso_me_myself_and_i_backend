@@ -14,6 +14,7 @@ app.use(cors())
 app.use(helmet())
 
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
+app.use('/images', express.static(__dirname + '/images'))
 
 app.use(express.json())
 
