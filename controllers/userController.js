@@ -5,6 +5,21 @@ const passwordSchema = require('../utils/password')
 const fs = require('fs')
 const {Op} = require('sequelize')
 
+exports.verification = (req, res, next) => {
+
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, process.env.TOKEN)
+  const userId = decodedToken.userId
+
+  let params_integer = parseInt(req.params.id)
+
+  if(userId === params_integer) {
+    res.status(200).json({ user_id: params_integer })
+  }else{
+    res.status(500).json({ message : 'User not found' })
+  }
+}
+
 exports.getUser = (req, res, next) => {
 
   const token = req.headers.authorization.split(' ')[1]
