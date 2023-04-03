@@ -161,5 +161,5 @@ exports.deleteUser = (req, res, next) => {
         .catch(() => res.status(500).json({ message : 'Deletion not possible' }))
       })
   })
-  .catch(() => res.status(500).json({ message : 'Impossible deletion' }))
+  .catch(() => res.status(500).json({ message : 'Deletion not possible' }))
 }
