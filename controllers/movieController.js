@@ -7,6 +7,21 @@ exports.getAllMovies = (req, res, next) => {
   .catch(err => res.status(400).json(err))
 }
 
+exports.getActors = (req, res, next) => {
+  
+  Movie.findAll()
+  .then(movies => {
+    const actors = movies.reduce((acc, curr) => {
+      if(!acc.find(actor => curr.actor === actor)) {
+        acc.push(curr.actor)
+      }
+      return acc
+    }, [])
+    res.status(200).json({ actors })
+  })
+  .catch(err => res.status(400).json(err))
+}
+
 exports.createMovie = (req, res, next) => {
 
   const movie = Movie.create({
