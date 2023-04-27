@@ -4,7 +4,7 @@ const router = express.Router()
 
 const associationController = require('../controllers/associationController')
 
-router.get('/:userId', associationController.get_viewed_movies)
+router.get('/', associationController.get_viewed_movies)
 router.post('/:userId/:movieId/:decade/:actor', associationController.create_viewed_movie)
 router.delete('/destroy/:userId/:movieId', associationController.destroy_viewed_movie)
 
